@@ -8,6 +8,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@auth0/nextjs-auth0": "^2.6.3",
     "@headlessui/react": "^1.7.15",
     "@heroicons/react": "^2.0.18",
     "@planetscale/database": "^1.7.0",
@@ -18,6 +19,7 @@
     "@types/react-dom": "18.2.4",
     "@vercel/analytics": "^1.0.1",
     "autoprefixer": "^10.4.14",
+    "axios": "^1.4.0",
     "eslint": "8.42.0",
     "eslint-config-next": "13.4.5",
     "js-cookie": "^3.0.5",

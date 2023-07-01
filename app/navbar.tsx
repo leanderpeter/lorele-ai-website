@@ -6,6 +6,7 @@ import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { signIn, signOut } from 'next-auth/react';
 import Image from 'next/image';
+import { useUser } from '@auth0/nextjs-auth0/client';
 
 const navigation = [
   { name: 'Dashboard', href: '/' },
@@ -16,8 +17,24 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function Navbar({ user }: { user: any }) {
+export default function Navbar() {
   const pathname = usePathname();
+
+  const { user, error, isLoading } = useUser();
+
+  console.log(user);
+
+  const handleLogin = () => {
+    const baseUri = window.location.origin;
+    const loginUrl = `${baseUri}/api/auth/login`;
+    window.location.href = loginUrl;
+  };
+
+  const handleLogout = () => {
+    const baseUri = window.location.origin;
+    const logoutUrl = `${baseUri}/api/auth/logout`;
+    window.location.href = logoutUrl;
+  };
 
   return (
     <Disclosure as="nav" className="bg-white shadow-sm">
@@ -74,10 +91,11 @@ export default function Navbar({ user }: { user: any }) {
                       <span className="sr-only">Open user menu</span>
                       <Image
                         className="h-8 w-8 rounded-full"
-                        src={user?.image || 'https://avatar.vercel.sh/leerob'}
+                        src={user?.picture || 'https://avatar.vercel.sh/leerob'}
+                        //src={'https://avatar.vercel.sh/leerob'}
                         height={32}
                         width={32}
-                        alt={`${user?.name || 'placeholder'} avatar`}
+                        alt={`${'placeholder'} avatar`}
                       />
                     </Menu.Button>
                   </div>
@@ -99,7 +117,7 @@ export default function Navbar({ user }: { user: any }) {
                                 active ? 'bg-gray-100' : '',
                                 'flex w-full px-4 py-2 text-sm text-gray-700'
                               )}
-                              onClick={() => signOut()}
+                              onClick={handleLogout}
                             >
                               Sign out
                             </button>
@@ -113,7 +131,7 @@ export default function Navbar({ user }: { user: any }) {
                                 active ? 'bg-gray-100' : '',
                                 'flex w-full px-4 py-2 text-sm text-gray-700'
                               )}
-                              onClick={() => signIn('github')}
+                              onClick={handleLogin}
                             >
                               Sign in
                             </button>
@@ -163,10 +181,10 @@ export default function Navbar({ user }: { user: any }) {
                     <div className="flex-shrink-0">
                       <Image
                         className="h-8 w-8 rounded-full"
-                        src={user.image}
+                        src={user.picture || 'https://avatar.vercel.sh/leerob'}
                         height={32}
                         width={32}
-                        alt={`${user.name} avatar`}
+                        alt={`my avatar`}
                       />
                     </div>
                     <div className="ml-3">
