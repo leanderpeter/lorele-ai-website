@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosRequestConfig, Method } from 'axios';
-import { getSession } from '@auth0/nextjs-auth0';
 
 const makeRequest = async (
   requestUrl: string | undefined,
@@ -14,18 +13,8 @@ const makeRequest = async (
   if (payload) {
     reqConfig.data = payload;
   }
-
-  // Get the user session from the request
-  const session = await getSession();
-
-  // Add the access token to the request headers
-  if (session && session.user && session.user.accessToken) {
-    if (!headers) {
-      headers = {};
-    }
-    headers['Authorization'] = `Bearer ${session.user.accessToken}`;
-  }
-
+  // If we dont provide any headers/cookie
+  // to auth the user, we send the credentials
   if (headers) {
     reqConfig.headers = headers;
   } else {
@@ -55,5 +44,7 @@ const makeRequest = async (
 export const listDatastores = async () => {
   const requestUrl = `datastores`;
 
-  return makeRequest(requestUrl, 'GET');
+  return makeRequest(requestUrl, 'GET', {
+    Authorization: process.env.VECTOR_AUTH_KEY || ''
+  });
 };
