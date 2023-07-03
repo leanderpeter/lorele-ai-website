@@ -1,5 +1,3 @@
-'use client';
-
 import { Fragment } from 'react';
 import { usePathname } from 'next/navigation';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
@@ -7,10 +5,11 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { signIn, signOut } from 'next-auth/react';
 import Image from 'next/image';
 import { useUser } from '@auth0/nextjs-auth0/client';
+import { useRouter } from 'next/router';
 
 const navigation = [
-  { name: 'Dashboard', href: '/' },
-  { name: 'Playground', href: '/playground' }
+  { name: 'Dashboard', href: '/dashboard' },
+  { name: 'Playground', href: '/playground/page' }
 ];
 
 function classNames(...classes: string[]) {
@@ -18,22 +17,17 @@ function classNames(...classes: string[]) {
 }
 
 export default function Navbar() {
+  const router = useRouter();
   const pathname = usePathname();
 
   const { user, error, isLoading } = useUser();
 
-  console.log(user);
-
   const handleLogin = () => {
-    const baseUri = window.location.origin;
-    const loginUrl = `${baseUri}/api/auth/login`;
-    window.location.href = loginUrl;
+    router.push('/api/auth/login');
   };
 
   const handleLogout = () => {
-    const baseUri = window.location.origin;
-    const logoutUrl = `${baseUri}/api/auth/logout`;
-    window.location.href = logoutUrl;
+    router.push('/api/auth/logout');
   };
 
   return (

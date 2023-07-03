@@ -7,7 +7,6 @@ import {
   TableCell,
   Text
 } from '@tremor/react';
-import { listDatastores } from '../lib/vector';
 
 interface Datastore {
   //id: number;
