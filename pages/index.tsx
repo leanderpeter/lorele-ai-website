@@ -1,7 +1,5 @@
 import { Analytics } from '@vercel/analytics/react';
-import Nav from './nav';
 import { Suspense } from 'react';
-import { UserProvider } from '@auth0/nextjs-auth0/client';
 
 export const metadata = {
   title: 'Next.js 13 + PlanetScale + NextAuth + Tailwind CSS',
@@ -15,12 +13,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <UserProvider>
-      <Suspense>
-        <Nav />
-      </Suspense>
+    <>
+      <Suspense></Suspense>
       {children}
       <Analytics />
-    </UserProvider>
+    </>
   );
 }

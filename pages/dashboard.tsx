@@ -1,46 +1,54 @@
 import { Card, Title, Text } from '@tremor/react';
+import CreateDatastoreModal from '../components/createDatastoreModal';
 import Search from '../components/search';
-import DatastoresTable from '../components/table';
-import Navbar from './navbar';
+import DatastoresTable, { Datastore } from '../components/table';
 import { useEffect, useState } from 'react';
-import { useUser } from '@auth0/nextjs-auth0/client';
 
 export const dynamic = 'force-dynamic';
 
 export default function IndexPage() {
-  const { user, isLoading } = useUser();
-
-  const [data, setData] = useState(null);
+  const [datastores, setDatastores] = useState<Datastore[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      const res = await fetch('/api/protected-api');
-
+    const fetchDatastores = async () => {
+      const res = await fetch('/api/get-datastores');
       const data = await res.json();
+      setDatastores(data.datastores.results);
+    };
 
-      setData(data);
-
-      console.log(data);
-    })();
+    fetchDatastores();
   }, []);
 
-  const datastores = { data: { results: [] } };
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
-    <>
-      <Navbar />
-      <main className="p-4 md:p-10 mx-auto max-w-7xl">
+    <main className="p-4 md:p-10 mx-auto max-w-7xl">
+      <div className="relative">
         <Title>Datastores</Title>
         <Text>A list of your datastores</Text>
         <Search />
-        <Card className="mt-6">
-          {datastores.data ? (
-            <DatastoresTable stores={datastores.data.results} />
-          ) : (
-            <></>
-          )}
-        </Card>
-      </main>
-    </>
+        <button
+          className="absolute top-4 right-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+          onClick={openModal}
+        >
+          Create Datastore
+        </button>
+      </div>
+      <Card className="mt-6">
+        {datastores && datastores.length > 0 ? (
+          <DatastoresTable stores={datastores} />
+        ) : (
+          <></>
+        )}
+      </Card>
+      <CreateDatastoreModal isOpen={isModalOpen} closeModal={closeModal} />
+    </main>
   );
 }

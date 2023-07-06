@@ -8,12 +8,13 @@ import {
   Text
 } from '@tremor/react';
 
-interface Datastore {
+export type Datastore = {
   //id: number;
   name: string;
-}
+};
 
 export default function DatastoresTable({ stores }: { stores: Datastore[] }) {
+  console.log(stores);
   return (
     <Table>
       <TableHead>
